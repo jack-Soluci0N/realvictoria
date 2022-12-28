@@ -1,1 +1,29 @@
-test
+version: '3'
+services:
+  web:
+    image: odoo:14.0
+    depends_on:
+      - realvictoria
+    ports:
+      - "80:8069"
+      - "447:8071"
+    environment:
+    - HOST=realvictoria
+    - USER=odoo
+    - PASSWORD=soluci-ON
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./odoo/config:/etc/odoo
+      - ./odoo/addons:/mnt/extra-addons
+  realvictoria:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=soluci-ON
+      - POSTGRES_USER=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data
+volumes:
+  odoo-web-data:
+  odoo-db-data:
